@@ -43,6 +43,8 @@ Antes de arreglar nada, comprueba qué falla. Prueba estas entradas y anota qué
 
 > 💡 Cuando la app se cierre, abre el **Logcat** y busca la excepción. ¿Qué método la lanza? ¿Por qué el último caso no cierra la app pero da un resultado absurdo?
 
+La lanza Integer.parseInt(), que es la instrucción que convierte el texto que escribes en un número. Si el campo está vacío o escribes algo que no es un número (como “abc”), no sabe qué hacer y da error. Como no habíamos preparado nada para ese error, la app se cierra
+
 ## Paso 2 · Crea la rama de trabajo
 
 ```bash
@@ -72,7 +74,7 @@ En `res/values/strings.xml` añade tres textos nuevos:
 ```
 
 > ❓ ¿Qué significan `%1$d` y `%2$d`? ¿En qué orden se rellenan?
-
+Son huecos en el texto que luego se rellenan con números. El 1 y el 2 indican cuál es el primer hueco y cuál el segundo, y la d indica que van a ser números. Se rellenan en el orden en que los pones en el código: el primer número (EDAD_MINIMA) va en %1$d y el segundo (EDAD_MAXIMA) va en %2$d. Así, el mensaje queda: “La edad debe estar entre 1 y 30”.
 ## Paso 5 · Restringe la entrada desde el layout
 
 En el `EditText` (`@+id/age_input`) añade:
@@ -123,6 +125,8 @@ resultText = findViewById(R.id.result_text);
 
 > ❓ ¿Qué pasaría si dejaras `EditText ageEdit = findViewById(...)` dentro de `onCreate()`?
 
+Crearías una copia de ageEdit que solo existe dentro de onCreate(), y el ageEdit de toda la clase se quedaría vacío, sin nada asignado. Luego, al pulsar el botón, el programa intentaría usar ese ageEdit vacío y la app se cerraría. Lo peor es que el código no marca ningún error antes de ejecutarlo: el fallo solo aparece al pulsar el botón
+
 ## Paso 8 · Saca la lógica del botón a un método
 
 El `setOnClickListener` debe quedar así de corto:
@@ -157,6 +161,7 @@ Implementa el método siguiendo este orden. En cuanto algo falle, llama a `mostr
 5. **Todo correcto**: quita el error del campo (`setError(null)`), calcula `age * FACTOR_CANINO` y muestra el resultado con `tu_edad_format`.
 
 > ❓ ¿Por qué limitar la edad a 30 evita también el desbordamiento que viste en el Paso 1?
+Porque con un máximo de 30, el resultado más grande posible es 30 × 7 = 210, que es un número pequeñito y cabe de sobra. Los números gigantes que provocaban el problema ya no pueden llegar a la multiplicación, porque se rechazan antes con el mensaje de error
 
 ## Paso 11 · Vuelve a probar
 
