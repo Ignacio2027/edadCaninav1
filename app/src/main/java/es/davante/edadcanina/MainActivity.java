@@ -26,7 +26,32 @@ public class MainActivity extends AppCompatActivity {
         );
 
         controlador = new EdadCaninaControlador(this, binding);
+
         binding.setControlador(controlador);
         binding.setLifecycleOwner(this);
+
+        if (savedInstanceState != null) {
+            String edad = savedInstanceState.getString("edad");
+            Integer resultado = (Integer)
+                    savedInstanceState.getSerializable("resultado");
+
+            binding.ageInput.setText(edad);
+            controlador.restaurarResultado(resultado);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(
+                "edad",
+                binding.ageInput.getText().toString()
+        );
+
+        outState.putSerializable(
+                "resultado",
+                controlador.getResultado().get()
+        );
+
+        super.onSaveInstanceState(outState);
     }
 }
