@@ -7,6 +7,9 @@ android {
     compileSdk {
         version = release(37)
     }
+buildFeatures {
+    dataBinding = true
+}
 
     defaultConfig {
         applicationId = "es.davante.edadcanina"
