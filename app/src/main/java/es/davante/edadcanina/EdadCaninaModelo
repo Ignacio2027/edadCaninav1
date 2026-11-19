@@ -1,0 +1,38 @@
+
+package es.davante.edadcanina;
+
+public class EdadCaninaModelo {
+
+    private static final int FACTOR_CANINO = 7;
+    private static final int EDAD_MINIMA = 1;
+    private static final int EDAD_MAXIMA = 30;
+
+    public boolean esNumero(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        }
+
+        try {
+            Integer.parseInt(texto.trim());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean esEdadValida(int edad) {
+        return edad >= EDAD_MINIMA && edad <= EDAD_MAXIMA;
+    }
+
+    public int calcularEdadCanina(int edad) {
+        return edad * FACTOR_CANINO;
+    }
+
+    public int getEdadMinima() {
+        return EDAD_MINIMA;
+    }
+
+    public int getEdadMaxima() {
+        return EDAD_MAXIMA;
+    }
+}
