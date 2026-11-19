@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         controlador = new EdadCaninaControlador(this, binding);
-
+        binding.setControlador(controlador);
         binding.setLifecycleOwner(this);
     }
 }
