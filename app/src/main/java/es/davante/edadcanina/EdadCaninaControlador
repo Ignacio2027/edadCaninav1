@@ -1,0 +1,76 @@
+
+package es.davante.edadcanina;
+
+import android.content.Context;
+
+import es.davante.edadcanina.databinding.ActivityMainBinding;
+
+public class EdadCaninaControlador {
+
+    private final Context context;
+    private final ActivityMainBinding binding;
+    private final EdadCaninaModelo modelo;
+
+    public EdadCaninaControlador(
+            Context context,
+            ActivityMainBinding binding) {
+
+        this.context = context;
+        this.binding = binding;
+        this.modelo = new EdadCaninaModelo();
+    }
+
+    public void calcularEdad() {
+
+        String texto = binding.ageInput.getText()
+                .toString()
+                .trim();
+
+        // Comprobar que no esté vacío
+        if (texto.isEmpty()) {
+            mostrarError("Introduce la edad de tu perro");
+            return;
+        }
+
+        // Comprobar que sea un número
+        if (!modelo.esNumero(texto)) {
+            mostrarError("Introduce un número válido");
+            return;
+        }
+
+        int edad = Integer.parseInt(texto);
+
+        // Comprobar que esté dentro del rango
+        if (!modelo.esEdadValida(edad)) {
+            mostrarError("La edad debe estar entre "
+                    + modelo.getEdadMinima()
+                    + " y "
+                    + modelo.getEdadMaxima()
+                    + " años");
+            return;
+        }
+
+        // Calcular edad canina
+        binding.ageInput.setError(null);
+
+        int resultado = modelo.calcularEdadCanina(edad);
+
+        binding.resultText.setText(
+                "Tu perro tiene " + resultado + " años caninos"
+        );
+    }
+
+    public void limpiar() {
+
+        binding.ageInput.setText("");
+        binding.ageInput.setError(null);
+        binding.resultText.setText("");
+    }
+
+    private void mostrarError(String mensaje) {
+
+        binding.ageInput.setError(mensaje);
+        binding.ageInput.requestFocus();
+        binding.resultText.setText("");
+    }
+}
