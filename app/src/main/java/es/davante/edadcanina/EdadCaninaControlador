@@ -65,4 +65,7 @@ public class EdadCaninaControlador {
         binding.ageInput.requestFocus();
         resultado.set(null);
     }
+public void restaurarResultado(Integer valor) {
+    resultado.set(valor);
+}
 }
