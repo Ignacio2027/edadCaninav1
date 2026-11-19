@@ -1,38 +1,40 @@
 
 package es.davante.edadcanina;
 
-import android.content.Context;
+import androidx.databinding.ObservableField;
 
 import es.davante.edadcanina.databinding.ActivityMainBinding;
 
 public class EdadCaninaControlador {
 
-    private final Context context;
     private final ActivityMainBinding binding;
     private final EdadCaninaModelo modelo;
 
+    private final ObservableField<Integer> resultado =
+            new ObservableField<>(null);
+
     public EdadCaninaControlador(
-            Context context,
+            MainActivity context,
             ActivityMainBinding binding) {
 
-        this.context = context;
         this.binding = binding;
         this.modelo = new EdadCaninaModelo();
+    }
+
+    public ObservableField<Integer> getResultado() {
+        return resultado;
     }
 
     public void calcularEdad() {
 
         String texto = binding.ageInput.getText()
-                .toString()
-                .trim();
+                .toString().trim();
 
-        // Comprobar que no esté vacío
-        if (texto.isEmpty()) {
+        if (Validacion.estaVacio(texto)) {
             mostrarError("Introduce la edad de tu perro");
             return;
         }
 
-        // Comprobar que sea un número
         if (!modelo.esNumero(texto)) {
             mostrarError("Introduce un número válido");
             return;
@@ -40,37 +42,27 @@ public class EdadCaninaControlador {
 
         int edad = Integer.parseInt(texto);
 
-        // Comprobar que esté dentro del rango
         if (!modelo.esEdadValida(edad)) {
-            mostrarError("La edad debe estar entre "
-                    + modelo.getEdadMinima()
-                    + " y "
-                    + modelo.getEdadMaxima()
-                    + " años");
+            mostrarError("La edad debe estar entre 1 y 30 años");
             return;
         }
 
-        // Calcular edad canina
         binding.ageInput.setError(null);
 
-        int resultado = modelo.calcularEdadCanina(edad);
-
-        binding.resultText.setText(
-                "Tu perro tiene " + resultado + " años caninos"
-        );
+        resultado.set(modelo.calcularEdadCanina(edad));
     }
 
     public void limpiar() {
 
         binding.ageInput.setText("");
         binding.ageInput.setError(null);
-        binding.resultText.setText("");
+        resultado.set(null);
     }
 
     private void mostrarError(String mensaje) {
 
         binding.ageInput.setError(mensaje);
         binding.ageInput.requestFocus();
-        binding.resultText.setText("");
+        resultado.set(null);
     }
 }
