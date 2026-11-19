@@ -1,0 +1,27 @@
+
+package es.davante.edadcanina;
+
+public class Validacion {
+
+    public static boolean estaVacio(String texto) {
+        return texto == null || texto.trim().isEmpty();
+    }
+
+    public static boolean esNumero(String texto) {
+
+        if (estaVacio(texto)) {
+            return false;
+        }
+
+        try {
+            Integer.parseInt(texto.trim());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean estaEnRango(int edad) {
+        return edad >= 1 && edad <= 30;
+    }
+}
